@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL BUG V.666</title>
+    <style>
+        :root {
+            --primary: #ff0000;
+            --secondary: #00ff41;
+            --accent: #bc13fe;
+            --bg: #050505;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            overflow-x: hidden;
+            background: radial-gradient(circle, #1a001a 0%, #000 100%);
+        }
+
+        /* --- Login Page --- */
+        #login-page {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(45deg, #000, #1a0000);
+        }
+
+        .glitch-text {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 2px 2px var(--accent);
+            animation: glitch 0.3s infinite;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 15px;
+            background: #111;
+            border: 2px solid var(--accent);
+            color: var(--secondary);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            width: 280px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { box-shadow: 0 0 15px var(--accent); border-color: white; }
+
+        button {
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1) rotate(-2deg);
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* --- Main Dashboard --- */
+        #main-page { display: none; padding: 20px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .profile-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- Profile Overlay --- */
+        #profile-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
+            padding: 50px 20px;
+            overflow-y: auto;
+        }
+
+        .profile-content {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid var(--secondary);
+            padding: 20px;
+            background: #0a0a0a;
+        }
+
+        .desc-area {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #ccc;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        /* --- Feature Grid --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .feature-card.active {
+            border-color: var(--secondary);
+            background: #001a05;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        /* --- Loading Screen --- */
+        #loading-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 200;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bar {
+            width: 80%;
+            height: 20px;
+            border: 1px solid var(--secondary);
+            margin-top: 20px;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: var(--secondary);
+            box-shadow: 0 0 20px var(--secondary);
+        }
+
+        /* --- Animations --- */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(188, 19, 254, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(188, 19, 254, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(188, 19, 254, 0); }
+        }
+
+        .btn-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <h1 class="glitch-text">DARK EXPLOIT</h1>
+        <input type="password" id="passInput" placeholder="Enter Secret Password...">
+        <button onclick="login()">Access System</button>
+        <p style="margin-top:10px; color: grey; font-size: 0.7rem;">Hint: admin123</p>
+    </div>
+
+    <div id="main-page">
+        <header>
+            <h2 style="color: var(--secondary);">V.666 ONLINE</h2>
+            <div class="profile-btn" onclick="toggleProfile()">💀</div>
+        </header>
+
+        <div style="margin-top: 30px;">
+            <label>Target Number:</label><br>
+            <input type="number" id="targetNum" placeholder="628xxxxxxxxxx" style="width: 100%;">
+        </div>
+
+        <div class="grid-container">
+            <div class="feature-card" onclick="selectFeature(this)">🔥 Bug Ghost</div>
+            <div class="feature-card" onclick="selectFeature(this)">❄️ Freeze UI</div>
+            <div class="feature-card" onclick="selectFeature(this)">💣 Text Bomb</div>
+            <div class="feature-card" onclick="selectFeature(this)">🌀 Crash Loop</div>
+            <div class="feature-card" onclick="selectFeature(this)">💀 Dark System</div>
+            <div class="feature-card" onclick="selectFeature(this)">🧪 Virus Lab</div>
+            <div class="feature-card" onclick="selectFeature(this)">⚡ Instant Lag</div>
+            <div class="feature-card" onclick="selectFeature(this)">🌑 Blackout</div>
+            <div class="feature-card" onclick="selectFeature(this)">🧨 Exploit Log</div>
+            <div class="feature-card" onclick="selectFeature(this)">☣️ Bio Hazard</div>
+        </div>
+
+        <button onclick="activateBug()" style="width: 100%; margin-top: 30px; height: 60px; font-size: 1.2rem;">AKTIVASI SEKARANG</button>
+    </div>
+
+    <div id="profile-overlay">
+        <div class="profile-content">
+            <button onclick="toggleProfile()" style="background: red; clip-path: none; margin-bottom: 20px;">CLOSE</button>
+            <h1 style="color: var(--accent);">SYSTEM OPERATOR</h1>
+            <hr border-color="var(--accent)">
+            <div class="desc-area">
+<strong>Nama:</strong> Anonymous Entity X<br><br>
+<strong>Deskripsi:</strong>
+Saya adalah penjelajah kegelapan digital. Deskripsi ini bisa sepanjang apa pun yang Anda inginkan. Tidak ada batasan karakter di sini. Anda bisa menulis seluruh isi buku atau log sistem di sini dan box ini akan menyesuaikan ukurannya secara otomatis mengikuti panjang teks yang dimasukkan. 
+
+Dunia ini hanyalah barisan kode, dan saya adalah bug yang tidak bisa dihapus. 
+            </div>
+            <a href="https://google.com" target="_blank" class="btn-link">KUNJUNGI WEBSITE RAHASIA</a>
+        </div>
+    </div>
+
+    <div id="loading-screen">
+        <h2 id="load-text" style="color: var(--secondary);">INJECTING PAYLOAD...</h2>
+        <div class="bar"><div class="progress" id="progress-bar"></div></div>
+    </div>
+
+    <script>
+        function login() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === "admin123") {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-page').style.display = 'block';
+            } else {
+                alert("ACCESS DENIED!");
+            }
+        }
+
+        function toggleProfile() {
+            const overlay = document.getElementById('profile-overlay');
+            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function selectFeature(el) {
+            document.querySelectorAll('.feature-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function activateBug() {
+            const num = document.getElementById('targetNum').value;
+            if(!num) return alert("Masukkan nomor target!");
+            
+            document.getElementById('loading-screen').style.display = 'flex';
+            let width = 0;
+            const bar = document.getElementById('progress-bar');
+            const loadText = document.getElementById('load-text');
+            
+            const interval = setInterval(() => {
+                if(width >= 100) {
+                    clearInterval(interval);
+                    showResult(num);
+                } else {
+                    width++;
+                    bar.style.width = width + '%';
+                    if(width > 30) loadText.innerText = "BYPASSING SECURITY...";
+                    if(width > 70) loadText.innerText = "SENDING BUG PACKETS...";
+                }
+            }, 50);
+        }
+
+        function showResult(num) {
+            document.getElementById('loading-screen').innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <h1 style="color:red; font-size: 3rem;">SUCCESS!</h1>
+                    <p style="color:white; margin: 20px 0;">Bug telah dikirim ke nomor: <strong>${num}</strong></p>
+                    <div style="background:#111; padding: 15px; border-left: 5px solid red; text-align: left; max-width: 400px;">
+                        <code>
+                            LOG: [CRITICAL ERROR]<br>
+                            STATUS: 200 OK<br>
+                            PAYLOAD: Binary_Overload.exe<br>
+                            RESULT: Device ${num} is now experiencing critical lag and UI freezing.
+                        </code>
+                    </div>
+                    <button onclick="location.reload()" style="margin-top:30px;">BACK TO TERMINAL</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
